@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.IO;
 
 public class DataPeristenceManager : MonoBehaviour
 {
+    [Header("Fait toi plaisir")]
+    [SerializeField] private string fileName;
+    
     private GameData gameData; 
     private List<IDataPeristence> dataPersistenceObjects;
+    private FileDataHandler DataHandler;
     public static DataPeristenceManager instance { get; private set; }
 
     private void Awake()
@@ -20,6 +25,7 @@ public class DataPeristenceManager : MonoBehaviour
 
     public void Start()
     {
+        this.DataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
     }
@@ -29,6 +35,8 @@ public class DataPeristenceManager : MonoBehaviour
     }
     public void LoadGame()
     {
+        this.gameData = DataHandler.Load();
+        
         if (this.gameData == null) 
         {
             Debug.Log("Ta pas de Save");
@@ -37,7 +45,7 @@ public class DataPeristenceManager : MonoBehaviour
 
         foreach (IDataPeristence dataPeristenceObj in dataPersistenceObjects)
         {
-            dataPeristenceObj.LoaaData(gameData);
+            dataPeristenceObj.LoaData(gameData);
         }
         
         Debug.Log(gameData.deathCount + " Mort L");
@@ -52,12 +60,16 @@ public class DataPeristenceManager : MonoBehaviour
         
         Debug.Log(gameData.deathCount + " Mort S");
 
+        DataHandler.Save(gameData);
+
     }
 
-    public void OnApllicationQuit()
+    private void OnApplicationQuit()
     {
         SaveGame();
     }
+
+
 
     private List<IDataPeristence> FindAllDataPersistenceObjects()
     {

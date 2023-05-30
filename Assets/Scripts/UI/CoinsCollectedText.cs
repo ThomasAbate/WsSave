@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class CoinsCollectedText : MonoBehaviour
+public class CoinsCollectedText : MonoBehaviour, IDataPeristence
 {
     [SerializeField] private int totalCoins = 0;
 
@@ -16,15 +16,29 @@ public class CoinsCollectedText : MonoBehaviour
         coinsCollectedText = this.GetComponent<TextMeshProUGUI>();
     }
 
+    public void LoaData(GameData data)
+    {
+        foreach(KeyValuePair<string, bool> pair in data.coinsCollected)
+        {
+            if(pair.Value)
+            {
+                coinsCollected++;
+            }
+        }
+    }
+
+    public void SaveData(ref GameData data)
+    {
+
+    }
+
     private void Start() 
     {
-        // subscribe to events
         GameEventsManager.instance.onCoinCollected += OnCoinCollected;
     }
 
     private void OnDestroy() 
     {
-        // unsubscribe from events
         GameEventsManager.instance.onCoinCollected -= OnCoinCollected;
     }
 

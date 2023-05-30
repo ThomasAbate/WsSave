@@ -24,7 +24,7 @@ public class DeathCountText : MonoBehaviour, IDataPeristence
         GameEventsManager.instance.onPlayerDeath -= OnPlayerDeath;
     }
 
-    public void LoaaData(GameData data)
+    public void LoaData(GameData data)
     {
         this.deathCount = data.deathCount;
     }

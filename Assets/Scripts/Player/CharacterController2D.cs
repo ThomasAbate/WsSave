@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-// This script is a basic 2D character controller that allows
-// the player to run and jump.
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class CharacterController2D : MonoBehaviour
+public class CharacterController2D : MonoBehaviour, IDataPeristence
 {
 
     [Header("Movement Params")]
@@ -17,18 +15,15 @@ public class CharacterController2D : MonoBehaviour
     [Header("Respawn Point")]
     [SerializeField] private Transform respawnPoint;
 
-    // components attached to player
     private BoxCollider2D coll;
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer sr;
     private ParticleSystem deathParticles;
 
-    // input parameters for movement
     Vector2 moveDirection = Vector2.zero;
     bool jumpPressed = false;
 
-    // other
     private bool facingRight = true;
     private bool isGrounded = false;
     private bool disableMovement = false;
@@ -44,6 +39,16 @@ public class CharacterController2D : MonoBehaviour
         deathParticles.Stop();
 
         rb.gravityScale = gravityScale;
+    }
+
+    public void LoaData(GameData data)
+    {
+        this.transform.position = data.PlayerPos;
+    }
+
+    public void SaveData(ref GameData data)
+    {
+        data.PlayerPos = this.transform.position;
     }
 
     private void FixedUpdate()
@@ -77,9 +82,7 @@ public class CharacterController2D : MonoBehaviour
         Bounds colliderBounds = coll.bounds;
         float colliderRadius = coll.size.x * 0.4f * Mathf.Abs(transform.localScale.x);
         Vector3 groundCheckPos = colliderBounds.min + new Vector3(colliderBounds.size.x * 0.5f, colliderRadius * 0.9f, 0);
-        // Check if player is grounded
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckPos, colliderRadius);
-        // Check if any of the overlapping colliders are not player collider, if so, set isGrounded to true
         this.isGrounded = false;
         if (colliders.Length > 0)
         {
@@ -110,7 +113,6 @@ public class CharacterController2D : MonoBehaviour
 
     private void UpdateFacingDirection()
     {
-        // set facing direction
         if (moveDirection.x > 0.1f)
         {
             facingRight = true;
@@ -119,9 +121,6 @@ public class CharacterController2D : MonoBehaviour
         {
             facingRight = false;
         }
-
-        // rotate according to direction
-        // we do this instead of using the 'flipX' spriteRenderer option because our player is made up of multiple sprites
         if (facingRight)
         {
             this.transform.eulerAngles = new Vector3(this.transform.eulerAngles.x, 0, this.transform.eulerAngles.z);
@@ -141,17 +140,13 @@ public class CharacterController2D : MonoBehaviour
 
     private IEnumerator HandleDeath() 
     {
-        // freeze player movemet
         rb.gravityScale = 0;
         disableMovement = true;
         rb.velocity = Vector3.zero;
-        // prevent other collisions
         coll.enabled = false;
-        // hide the player visual
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 0);
         deathParticles.Play();
 
-        // send off event that we died for other components in our system to pick up
         GameEventsManager.instance.PlayerDeath();
 
         yield return new WaitForSeconds(0.4f);
@@ -161,20 +156,17 @@ public class CharacterController2D : MonoBehaviour
 
     private void Respawn() 
     {
-        // enable movement
+
         rb.gravityScale = gravityScale;
         coll.enabled = true;
         disableMovement = false;
-        // show player visual
         sr.color = new Color(sr.color.r, sr.color.g, sr.color.b, 1);
         deathParticles.Stop();
-        // move the player to the respawn point
         this.transform.position = respawnPoint.position;
     }
 
     private void OnCollisionEnter2D(Collision2D collision) 
     {
-        // if we collided with anything in the harmful layer, death occurs
         if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Harmful")))
         {
             StartCoroutine(HandleDeath());
