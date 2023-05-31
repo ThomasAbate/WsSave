@@ -6,15 +6,15 @@ using UnityEngine;
 [System.Serializable]
 public class ZerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
 {
-    [SerializeField] private List<TKey> keys = new List<TKey>();
+    [SerializeField] private List<TKey> Coins = new List<TKey>();
     [SerializeField] private List<TValue> value = new List<TValue>();
     public void OnBeforeSerialize()
     {
-        keys.Clear();
+        Coins.Clear();
         value.Clear();
         foreach(KeyValuePair<TKey, TValue> pair in this)
         {
-            keys.Add(pair.Key);
+            Coins.Add(pair.Key);
             value.Add(pair.Value);
         }
     }
@@ -23,14 +23,14 @@ public class ZerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
     {
         this.Clear();
         
-        if(keys.Count != value.Count)
+        if(Coins.Count != value.Count)
         {
             Debug.LogError("j'ai pas compris à quoi cers se truc mais si je le vois c'est mal");
         }
 
-        for (int i = 0; i < keys.Count; i++)
+        for (int i = 0; i < Coins.Count; i++)
         {
-            this.Add(keys[i], value[i]);
+            this.Add(Coins[i], value[i]);
         }
     }
 }
