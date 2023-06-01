@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
@@ -173,4 +173,13 @@ public class CharacterController2D : MonoBehaviour, IDataPeristence
         }
     }
 
+    public void Pause(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            PauseMenu.instance.PauseGame();
+
+            Debug.Log("game paused");
+        }
+    }
 }

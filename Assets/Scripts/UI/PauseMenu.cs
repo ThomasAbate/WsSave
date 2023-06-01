@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuPaus : MonoBehaviour
+public class PauseMenu : MonoBehaviour
 {
+    public static PauseMenu instance;
     public static bool gameIsPaused = false;
 
     public GameObject pauseMenuUI;
-    void Update()
+
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
+        if (instance) Destroy(this);
+        else instance = this;
+    }
+    public void PauseGame()
+    {
+        
             if (gameIsPaused)
             {
                 Resume();
@@ -20,7 +26,7 @@ public class MenuPaus : MonoBehaviour
             {
                 Paused();
             }
-        }
+        
     }
 
     void Paused()
@@ -40,6 +46,6 @@ public class MenuPaus : MonoBehaviour
     public void LoadMainMenu()
     {
         Resume();
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene("Menu");
     }
 }
