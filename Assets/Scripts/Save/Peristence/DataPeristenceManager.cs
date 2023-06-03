@@ -10,7 +10,7 @@ public class DataPeristenceManager : MonoBehaviour
     [Header("Fait toi plaisir")]
     [SerializeField] private string fileName;
     
-    public GameData gameData; 
+    private GameData gameData; 
     private List<IDataPeristence> dataPersistenceObjects;
     private FileDataHandler DataHandler;
     public static DataPeristenceManager instance { get; private set; }
@@ -19,21 +19,44 @@ public class DataPeristenceManager : MonoBehaviour
     {
         if (instance != null)
         {
-            Debug.LogError("Attention");
+            Debug.LogError("Attention, A pu");
+            Destroy(this.gameObject);
+            return;
         }
-        instance = this; 
+        instance = this;
+        DontDestroyOnLoad(this.gameObject);
+
+        this.DataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
     }
 
-    public void Start()
+    private void OnEnable()
     {
-        this.DataHandler = new FileDataHandler(Application.persistentDataPath, fileName);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+    }
+
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("OnScenneLoaded est appelé");
         this.dataPersistenceObjects = FindAllDataPersistenceObjects();
         LoadGame();
     }
+
+    public void OnSceneUnloaded(Scene scene)
+    {
+        Debug.Log("OnSceneUnloaded est appelé");
+        SaveGame();
+    }
+
     public void NewGame()
     {
         gameData = new GameData();
-        SceneManager.LoadSceneAsync("SampleScene");
         Debug.Log("oui");
     }
     public void LoadGame()
@@ -43,7 +66,7 @@ public class DataPeristenceManager : MonoBehaviour
         if (this.gameData == null) 
         {
             Debug.Log("Ta pas de Save");
-            NewGame();
+            return;
         }
 
         foreach (IDataPeristence dataPeristenceObj in dataPersistenceObjects)
@@ -56,6 +79,11 @@ public class DataPeristenceManager : MonoBehaviour
     }
     public void SaveGame()
     {
+        if (this.gameData == null)
+        {
+            Debug.LogWarning("No data, pas de jeu");
+        }
+        
         foreach (IDataPeristence dataPeristenceObj in dataPersistenceObjects)
         {
             dataPeristenceObj.SaveData(ref gameData);
@@ -72,13 +100,16 @@ public class DataPeristenceManager : MonoBehaviour
         SaveGame();
     }
 
-
-
     private List<IDataPeristence> FindAllDataPersistenceObjects()
     {
         IEnumerable<IDataPeristence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>().OfType<IDataPeristence>();
         
         return new List<IDataPeristence>(dataPersistenceObjects);
+    }
+
+    public bool HasGameData()
+    {
+        return gameData != null;
     }
 
 }

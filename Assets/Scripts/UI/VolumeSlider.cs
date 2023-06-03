@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class VolumeSlider : MonoBehaviour, IDataPeristence
 {
     public Slider volumeSlider;
-    public AudioSource audio;
+    public AudioSource Audio;
 
     public void LoaData(GameData data)
     {
@@ -20,6 +20,6 @@ public class VolumeSlider : MonoBehaviour, IDataPeristence
 
     public void Update() 
     {
-        audio.volume = volumeSlider.value;
+        Audio.volume = volumeSlider.value;
     }
 }
