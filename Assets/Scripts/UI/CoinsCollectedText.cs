@@ -29,7 +29,13 @@ public class CoinsCollectedText : MonoBehaviour, IDataPeristence
 
     public void SaveData(ref GameData data)
     {
-
+        foreach (KeyValuePair<string, bool> pair in data.coinsCollected)
+        {
+            if (pair.Value)
+            {
+                coinsCollected--;
+            }
+        }
     }
 
     private void Start() 

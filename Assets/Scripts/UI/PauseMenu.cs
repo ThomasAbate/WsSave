@@ -31,6 +31,7 @@ public class PauseMenu : MonoBehaviour
 
     void Paused()
     {
+        CharacterController2D.Instance.enabled = false;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         gameIsPaused = true;
@@ -38,14 +39,14 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        CharacterController2D.Instance.enabled = true;
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         gameIsPaused = false;
     }
 
-    public void LoadMainMenu()
+    public void Quit()
     {
-        Resume();
-        SceneManager.LoadScene("Menu");
+        Application.Quit();
     }
 }

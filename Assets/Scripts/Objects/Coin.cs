@@ -15,6 +15,7 @@ public class Coin : MonoBehaviour, IDataPeristence
 
     private SpriteRenderer visual;
     private bool collected = false;
+    public CircleCollider2D CircleCollider2D;
 
     private void Awake() 
     {
@@ -49,6 +50,7 @@ public class Coin : MonoBehaviour, IDataPeristence
 
     private void CollectCoin() 
     {
+        CircleCollider2D.gameObject.SetActive(false);
         collected = true;
         visual.gameObject.SetActive(false);
         GameEventsManager.instance.CoinCollected();

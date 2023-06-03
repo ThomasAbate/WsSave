@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class GameData
+public class GameData 
 {
     public int deathCount;
     public Vector3 PlayerPos;

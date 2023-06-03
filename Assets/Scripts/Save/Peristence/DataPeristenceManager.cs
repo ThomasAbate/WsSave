@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.IO;
+using UnityEngine.SceneManagement;
 
 public class DataPeristenceManager : MonoBehaviour
 {
     [Header("Fait toi plaisir")]
     [SerializeField] private string fileName;
     
-    private GameData gameData; 
+    public GameData gameData; 
     private List<IDataPeristence> dataPersistenceObjects;
     private FileDataHandler DataHandler;
     public static DataPeristenceManager instance { get; private set; }
@@ -31,7 +32,9 @@ public class DataPeristenceManager : MonoBehaviour
     }
     public void NewGame()
     {
-        this.gameData = new GameData();
+        gameData = new GameData();
+        SceneManager.LoadSceneAsync("SampleScene");
+        Debug.Log("oui");
     }
     public void LoadGame()
     {

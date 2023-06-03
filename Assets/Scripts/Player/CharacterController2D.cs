@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 public class CharacterController2D : MonoBehaviour, IDataPeristence
 {
 
+    public static CharacterController2D Instance;
+    
     [Header("Movement Params")]
     [SerializeField] private float runSpeed = 6.0f;
     [SerializeField] private float jumpSpeed = 8.0f;
@@ -39,6 +41,9 @@ public class CharacterController2D : MonoBehaviour, IDataPeristence
         deathParticles.Stop();
 
         rb.gravityScale = gravityScale;
+
+        if (Instance) Destroy(this);
+        else Instance = this;
     }
 
     public void LoaData(GameData data)

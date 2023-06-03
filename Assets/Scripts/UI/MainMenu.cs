@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
-
+    public GameObject MenuPause;
     public void NewGameCLick()
     {
         DataPeristenceManager.instance.NewGame();
@@ -22,6 +22,6 @@ public class MainMenu : MonoBehaviour
 
     public void QuitGameClick()
     {
-       Application.Quit();
+        Application.Quit();
     }
 }
