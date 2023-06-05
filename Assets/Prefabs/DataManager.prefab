@@ -44,11 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ad6447a37d55b8499e4d5a04ade641f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fileName: json.data
-  gameData:
-    deathCount: 0
-    PlayerPos: {x: 0, y: 0, z: 0}
-    coinsCollected:
-      Coins: []
-      value: 
-    Volume: 0
+  fileName: Thomas.data
