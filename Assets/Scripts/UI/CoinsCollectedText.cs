@@ -36,6 +36,7 @@ public class CoinsCollectedText : MonoBehaviour, IDataPeristence
                 coinsCollected--;
             }
         }
+
     }
 
     private void Start() 
@@ -56,5 +57,6 @@ public class CoinsCollectedText : MonoBehaviour, IDataPeristence
     private void Update() 
     {
         coinsCollectedText.text = coinsCollected + " / " + totalCoins;
+        
     }
 }
