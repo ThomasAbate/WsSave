@@ -7,19 +7,21 @@ public class VolumeSlider : MonoBehaviour, IDataPeristence
 {
     public Slider volumeSlider;
     public AudioSource Audio;
+    public float Volume;
 
     public void LoaData(GameData data)
     {
-         this.volumeSlider.value = data.Volume;
+         this.Volume = data.Son;
     }
 
     public void SaveData(ref GameData data)
     {
-        data.Volume = this.volumeSlider.value;
+        data.Son = this.Volume;
     }
 
     public void Update() 
     {
         Audio.volume = volumeSlider.value;
+        Volume = volumeSlider.value;
     }
 }
