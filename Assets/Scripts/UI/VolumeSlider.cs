@@ -19,7 +19,7 @@ public class VolumeSlider : MonoBehaviour, IDataPeristence
         data.Son = this.Volume;
     }
 
-    public void Update() 
+    public void UpdateVolume() 
     {
         Audio.volume = volumeSlider.value;
         Volume = volumeSlider.value;
