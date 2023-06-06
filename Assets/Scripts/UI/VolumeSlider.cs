@@ -3,25 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class VolumeSlider : MonoBehaviour, IDataPeristence
+public class VolumeSlider : MonoBehaviour
 {
     public Slider volumeSlider;
     public AudioSource Audio;
     public float Volume;
 
-    public void LoaData(GameData data)
+    private void Start()
     {
-         this.Volume = data.Son;
+        if (PlayerPrefs.HasKey("Volume"))
+        {
+            volumeSlider.value = PlayerPrefs.GetFloat("Volume");
+            Audio.volume = volumeSlider.value;
+        }
     }
-
-    public void SaveData(ref GameData data)
-    {
-        data.Son = this.Volume;
-    }
-
     public void UpdateVolume() 
     {
         Audio.volume = volumeSlider.value;
         Volume = volumeSlider.value;
+    }
+
+    public void Save()
+    {
+        PlayerPrefs.SetFloat("Volume", volumeSlider.value);
     }
 }
